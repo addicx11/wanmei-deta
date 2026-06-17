@@ -892,21 +892,8 @@ a { text-decoration: none; color: inherit; }
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
 
-/* ===== 大屏居中（保持移动端 2 列布局） ===== */
+/* ===== 响应式：全宽一致 ===== */
 @media (min-width: 480px) {
-  body {
-    max-width: 480px;
-    margin: 0 auto;
-    box-shadow: 0 0 60px rgba(140,90,60,0.08);
-    min-height: 100vh;
-    position: relative;
-  }
-  .bottom-nav {
-    left: 50%;
-    transform: translateX(-50%);
-    max-width: 480px;
-  }
-  .modal-content { max-width: 480px; }
   .cards-grid { gap: 14px; }
 }
 
