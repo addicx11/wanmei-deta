@@ -44,6 +44,8 @@ html {
 }
 
 body {
+  max-width: 480px;
+  margin: 0 auto;
   font-family: "Noto Serif SC", "Source Han Serif SC", "思源宋体", "Songti SC", "宋体",
                -apple-system, "PingFang SC", "Microsoft YaHei", serif;
   background: var(--paper);
@@ -735,8 +737,10 @@ a { text-decoration: none; color: inherit; }
 .bottom-nav {
   position: fixed;
   bottom: 0;
-  left: 0;
-  right: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 480px;
   z-index: 150;
   background: rgba(255,255,255,0.92);
   backdrop-filter: blur(12px);
@@ -892,10 +896,6 @@ a { text-decoration: none; color: inherit; }
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
 
-/* ===== 响应式：全宽一致 ===== */
-@media (min-width: 480px) {
-  .cards-grid { gap: 14px; }
-}
 
 /* 移动端 select 下拉箭头 */
 select {
