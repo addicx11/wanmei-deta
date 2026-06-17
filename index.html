@@ -1241,6 +1241,23 @@ function pushToCloud(showMsg){
   }).catch(function(e){ if(showMsg)alert('❌ 网络错误: '+e.message); });
 }
 
+// 静默自动同步（不弹提示，后台静默推送）
+var _syncTimer = null;
+function autoSync(){
+  var token = localStorage.getItem('gh_token');
+  if(!token) return;
+  clearTimeout(_syncTimer);
+  _syncTimer = setTimeout(function(){
+    var json = JSON.stringify(getAllCloudData(),null,2);
+    var content = btoa(unescape(encodeURIComponent(json)));
+    fetch(API_URL).then(function(r){return r.json();}).then(function(info){
+      return fetch(API_URL,{method:'PUT',headers:{'Authorization':'Bearer '+token,'Content-Type':'application/json'},body:JSON.stringify({message:'update data',content:content,sha:info.sha})});
+    }).then(function(r){return r.json();}).then(function(result){
+      if(result.content){ saveLocalAll(); console.log('☁️ 自动同步完成'); }
+    }).catch(function(e){ console.log('自动同步失败:', e.message); });
+  }, 2000);
+}
+
 // 本地全部存储（缓存）
 function saveLocalAll(){
   try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(works)); }catch(e){}
@@ -1274,6 +1291,7 @@ function loadData() {
 function saveData() {
   try { localStorage.setItem(STORAGE_KEY, JSON.stringify(works)); }
   catch(e) { alert('存储空间不足！'); }
+  autoSync();
 }
 
 // ==================== 团建图片管理 ====================
@@ -1284,6 +1302,7 @@ function loadTeamImages() {
 function saveTeamImages() {
   try { localStorage.setItem(TEAM_IMG_KEY, JSON.stringify(teamImages)); }
   catch(e) { alert('存储空间不足！'); }
+  autoSync();
 }
 function renderTeamGallery() {
   var g = $('#teamGallery');
@@ -1326,7 +1345,7 @@ function loadTeamPkgs(){
   try { var r=localStorage.getItem(TEAM_PKG_KEY); teamPackages=r?JSON.parse(r):[]; if(!Array.isArray(teamPackages)||!teamPackages.length) teamPackages=getDefaultPkgs(); }
   catch(e){ teamPackages=getDefaultPkgs(); }
 }
-function saveTeamPkgs(){ try{localStorage.setItem(TEAM_PKG_KEY,JSON.stringify(teamPackages));}catch(e){} }
+function saveTeamPkgs(){ try{localStorage.setItem(TEAM_PKG_KEY,JSON.stringify(teamPackages));}catch(e){} autoSync(); }
 function renderTeamPkgs(){
   var el=$('#teamPackages'); if(!el) return;
   el.innerHTML = teamPackages.map(function(p,i){
@@ -1359,7 +1378,7 @@ function loadAbout(){
   catch(e){}
   if(!aboutParagraphs.length){ var def=getDefaultAbout(); aboutParagraphs=def.paragraphs; aboutContact=def.contact; saveAbout(); }
 }
-function saveAbout(){ try{localStorage.setItem(ABOUT_KEY,JSON.stringify({paragraphs:aboutParagraphs,contact:aboutContact}));}catch(e){} }
+function saveAbout(){ try{localStorage.setItem(ABOUT_KEY,JSON.stringify({paragraphs:aboutParagraphs,contact:aboutContact}));}catch(e){} autoSync(); }
 
 function renderAboutPage(){
   // 关于我们段落
