@@ -1,0 +1,13 @@
+node_modules/
+dist/
+.vscode/
+.claude/
+src/
+*.log
+.env
+.env.local
+.DS_Store
+Thumbs.db
+test_simple.html
+index_test.html
+package-lock.json

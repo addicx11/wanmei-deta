@@ -1,0 +1,1697 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>皖美的她 — 非遗手工作品</title>
+<style>
+/* ============================================================
+   "皖美的她" — 非遗手作文创电商 H5
+   配色：宣纸底 · 朱砂红 · 墨绿 · 传统中国风
+   ============================================================ */
+
+/* ===== CSS 变量 ===== */
+:root {
+  --red:          #B83838;   /* 朱砂红：标题/价格/按钮 */
+  --red-dark:     #9A2828;
+  --green:        #1A5948;   /* 墨绿：分类图标/装饰线 */
+  --cream:        #F5F0E1;   /* 米白：卡片底色 */
+  --paper:        #F9F6ED;   /* 宣纸色：页面底色 */
+  --card-bg:      #F5F0E1;
+  --text:         #222222;
+  --text-secondary:#5D5348;
+  --text-muted:   #A09888;
+  --border:       #E2D9C5;
+  --border-light: #EEE8D8;
+  --shadow-sm:    0 2px 8px rgba(0,0,0,0.04);
+  --shadow:       0 4px 16px rgba(0,0,0,0.06);
+  --shadow-lg:    0 8px 32px rgba(0,0,0,0.10);
+  --shadow-xl:    0 16px 48px rgba(0,0,0,0.12);
+  --radius-sm:     8px;
+  --radius:        10px;
+  --radius-lg:     16px;
+  --nav-height:    62px;
+  --safe-bottom:   env(safe-area-inset-bottom, 0px);
+}
+
+/* ===== 全局重置 ===== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html {
+  font-size: 16px;
+  -webkit-tap-highlight-color: transparent;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: "Noto Serif SC", "Source Han Serif SC", "思源宋体", "Songti SC", "宋体",
+               -apple-system, "PingFang SC", "Microsoft YaHei", serif;
+  background: var(--paper);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding-bottom: calc(var(--nav-height) + var(--safe-bottom) + 24px);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+img { display: block; max-width: 100%; }
+button { cursor: pointer; font-family: inherit; border: none; outline: none; background: none; }
+input, textarea, select { font-family: inherit; font-size: 16px; outline: none; }
+a { text-decoration: none; color: inherit; }
+
+.hidden { display: none !important; }
+
+/* ===== 顶部 Header ===== */
+.app-header {
+  background: var(--cream);
+  padding: 0 20px 12px;
+  text-align: center;
+  color: var(--red);
+  border-top: 1px solid var(--green);
+  border-bottom: 1px solid var(--green);
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.app-header .subtitle {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin: 2px 0 0;
+  line-height: 1;
+  letter-spacing: 3px;
+  font-weight: 400;
+}
+
+.app-header .header-logo {
+  width: 200px;
+  display: block;
+  margin: 0 auto;
+}
+
+/* ===== 分类标签 ===== */
+.category-section { padding: 10px 0 12px; margin: 0; }
+
+.category-tabs {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  padding: 0 14px;
+  margin: 0;
+}
+
+.category-tabs::-webkit-scrollbar { display: none; }
+.category-tabs { scrollbar-width: none; }
+
+.category-tag {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 16px;
+  border-radius: 22px;
+  font-size: 0.84rem;
+  font-weight: 500;
+  background: var(--card-bg);
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
+  white-space: nowrap;
+  transition: all 0.25s;
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+}
+
+.category-tag.active {
+  background: var(--red);
+  color: #fff;
+  border-color: var(--red);
+  box-shadow: 0 4px 14px rgba(184,56,56,0.25);
+  font-weight: 600;
+}
+
+.category-tag:active { transform: scale(0.94); }
+
+/* ===== 卡片网格 ===== */
+.cards-container { padding: 0 12px; }
+
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+}
+
+.card {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.2s, box-shadow 0.2s;
+  cursor: pointer;
+  position: relative;
+}
+
+.card:active { transform: scale(0.965); }
+
+.card-image {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  display: block;
+  background: linear-gradient(135deg, var(--cream) 0%, var(--cream) 100%);
+}
+
+.card-body { padding: 12px 12px 14px; }
+
+.card-category-badge {
+  display: inline-block;
+  font-size: 0.64rem;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 12px;
+  background: var(--cream);
+  color: var(--red-dark);
+  margin-bottom: 6px;
+  letter-spacing: 0.5px;
+}
+
+.card-title {
+  font-size: 0.88rem;
+  font-weight: 600;
+  line-height: 1.35;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  color: var(--text);
+}
+
+.card-meta {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-top: 8px;
+}
+
+.card-price {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--red);
+  letter-spacing: -0.5px;
+}
+
+.card-price .symbol { font-size: 0.7rem; font-weight: 600; margin-right: 1px; }
+
+.card-sales { font-size: 0.68rem; color: var(--text-muted); }
+
+/* ===== 空状态 ===== */
+.empty-state {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 70px 20px;
+  color: var(--text-muted);
+}
+
+.empty-state p { font-size: 0.9rem; }
+
+/* ===== 详情模态框 ===== */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: rgba(30,15,8,0.55);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  animation: fadeIn 0.25s ease;
+}
+
+.modal-content {
+  background: var(--card-bg);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  width: 100%;
+  max-width: 500px;
+  max-height: 88vh;
+  overflow-y: auto;
+  animation: slideUp 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+  position: relative;
+}
+
+.modal-image-wrapper { position: relative; }
+
+.modal-image {
+  width: 100%;
+  max-height: 50vh;
+  object-fit: contain;
+  display: block;
+  background: linear-gradient(135deg, var(--cream) 0%, var(--cream) 100%);
+}
+
+.modal-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.35);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  color: #fff;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  transition: 0.2s;
+}
+
+.modal-close:hover { background: rgba(0,0,0,0.55); }
+
+.modal-body { padding: 22px 20px 28px; }
+
+.modal-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: var(--text);
+}
+
+.modal-price {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--red);
+  margin-bottom: 14px;
+  letter-spacing: -0.5px;
+}
+
+.modal-price .symbol { font-size: 0.85rem; margin-right: 2px; }
+
+.modal-craft {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: var(--cream);
+  border-radius: 20px;
+  font-size: 0.82rem;
+  color: var(--red-dark);
+  margin-bottom: 14px;
+}
+
+.modal-description {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.75;
+  margin-bottom: 10px;
+}
+
+.modal-sales {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* ===== 关于页面 ===== */
+.about-view { padding: 20px 16px 60px; }
+
+.about-hero {
+  text-align: center;
+  padding: 6px 0 2px;
+}
+
+.about-hero .about-logo {
+  text-align: center;
+  margin-bottom: 2px;
+}
+
+.about-hero .about-logo img {
+  height: 180px;
+  display: block;
+  margin: 0 auto;
+}
+
+.about-hero h2 {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--red-dark);
+  margin: 2px 0 0;
+}
+
+.about-hero .about-tagline {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.about-view .section-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--red-dark);
+  margin: 24px 0 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.about-view .section-title::before {
+  content: '';
+  width: 4px;
+  height: 22px;
+  background: linear-gradient(180deg, var(--red) 0%, var(--green) 100%);
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.about-view p {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.85;
+  margin-bottom: 14px;
+  text-indent: 2em;
+}
+
+.about-view p.no-indent { text-indent: 0; }
+
+/* ===== 联系我们 ===== */
+.contact-section { margin-top: 8px; }
+.contact-top {
+  display: flex; justify-content: space-between; align-items: flex-start;
+  gap: 20px; margin-bottom: 32px;
+}
+.contact-list { flex: 1; }
+.contact-item {
+  display: flex; align-items: center; margin-bottom: 20px;
+  font-size: 0.92rem; line-height: 1.6;
+}
+.contact-svg-icon {
+  width: 28px; height: 28px; margin-right: 12px;
+  opacity: 0.75; flex-shrink: 0;
+}
+.contact-qr-box {
+  background: #e2d8c3; padding: 10px 12px 8px; border-radius: 8px;
+  text-align: center; flex-shrink: 0;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+}
+.contact-qr-box img {
+  width: 120px; height: 120px; display: block; margin: 0 auto 4px;
+}
+.contact-qr-box .qr-label {
+  font-size: 0.85rem; text-align: center;
+  margin: 0; padding: 0; line-height: 1;
+  text-indent: 0;
+}
+.contact-qr-row {
+  display: flex; justify-content: space-between; gap: 14px;
+}
+.contact-qr-card { text-align: center; flex: 1; }
+.contact-qr-card img {
+  width: 100%; max-width: 140px; aspect-ratio: 1;
+  object-fit: contain; margin-bottom: 8px;
+}
+.contact-qr-card .qr-label { font-size: 0.85rem; text-indent: 0; }
+@media (max-width: 500px) {
+  .contact-top { flex-direction: column; }
+  .contact-qr-row { flex-wrap: wrap; }
+  .contact-qr-card { flex: 1 1 45%; }
+}
+
+.about-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin: 20px 0;
+}
+
+.about-stat {
+  text-align: center;
+  padding: 20px 8px;
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+}
+
+.about-stat .num {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--red);
+  letter-spacing: -0.5px;
+}
+
+.about-stat .label {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+/* ===== 管理后台 ===== */
+.admin-panel { padding: 14px 14px 70px; }
+
+.admin-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+  padding: 0 2px;
+}
+
+.admin-topbar h2 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.admin-form {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  padding: 18px;
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 18px;
+}
+
+.admin-form .form-section-title {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 14px;
+  color: var(--red-dark);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.form-group { margin-bottom: 14px; }
+
+.form-group label {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 5px;
+}
+
+.form-group label .required-star { color: var(--red); margin-left: 2px; }
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+  width: 100%;
+  padding: 11px 14px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--paper);
+  color: var(--text);
+  transition: all 0.2s;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+  border-color: var(--red);
+  box-shadow: 0 0 0 4px rgba(184,56,56,0.06);
+  background: #fff;
+}
+
+.form-group textarea { resize: vertical; min-height: 72px; }
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.image-upload-area {
+  border: 2px dashed var(--border);
+  border-radius: var(--radius-sm);
+  padding: 24px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: var(--paper);
+}
+
+.image-upload-area:hover,
+.image-upload-area.drag-over {
+  border-color: var(--red);
+  background: var(--cream);
+}
+
+.image-upload-area i {
+  font-size: 2rem;
+  color: var(--green);
+  margin-bottom: 10px;
+  display: block;
+}
+
+.image-upload-area span { font-size: 0.8rem; color: var(--text-muted); }
+
+.image-preview {
+  width: 100%;
+  max-height: 200px;
+  object-fit: contain;
+  border-radius: var(--radius-sm);
+  margin-top: 10px;
+  border: 1px solid var(--border-light);
+}
+
+.image-preview:not([src]),
+.image-preview[src=""] { display: none; }
+
+.form-actions { display: flex; gap: 10px; margin-top: 18px; }
+
+/* ===== 按钮体系 ===== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 11px 22px;
+  border-radius: 24px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.btn-primary {
+  background: var(--red);
+  color: #fff;
+  border-radius: 6px;
+  box-shadow: 0 4px 14px rgba(184,56,56,0.25);
+}
+
+.btn-primary:hover { box-shadow: 0 6px 20px rgba(184,56,56,0.35); transform: translateY(-1px); }
+.btn-primary:active { transform: scale(0.97); }
+
+.btn-outline {
+  background: var(--card-bg);
+  border: 1.5px solid var(--border);
+  color: var(--text-secondary);
+}
+
+.btn-outline:hover { background: var(--paper); border-color: var(--red); color: var(--red); }
+
+.btn-danger {
+  background: var(--red);
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(184,56,56,0.20);
+}
+
+.btn-danger:hover { opacity: 0.88; }
+
+.btn-sm { padding: 7px 16px; font-size: 0.78rem; border-radius: 18px; }
+.btn-xs { padding: 5px 12px; font-size: 0.72rem; border-radius: 14px; }
+.btn-block { width: 100%; }
+
+/* 工具栏 */
+.admin-tab.active {
+  background: var(--red) !important;
+  color: #fff !important;
+  border-color: var(--red) !important;
+}
+
+.toolbar {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+}
+
+/* ===== 后台作品列表 ===== */
+.admin-section-label {
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.admin-work-list { display: flex; flex-direction: column; gap: 10px; }
+
+.admin-work-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--card-bg);
+  border-radius: var(--radius-sm);
+  padding: 12px;
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow 0.2s;
+}
+
+.admin-work-item:hover { box-shadow: var(--shadow); }
+
+.admin-work-thumb {
+  width: 60px;
+  height: 60px;
+  border-radius: 10px;
+  object-fit: cover;
+  flex-shrink: 0;
+  background: var(--cream);
+}
+
+.admin-work-info { flex: 1; min-width: 0; }
+
+.admin-work-info .name {
+  font-size: 0.88rem;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 2px;
+}
+
+.admin-work-info .meta { font-size: 0.7rem; color: var(--text-muted); }
+
+.admin-work-actions { display: flex; gap: 8px; flex-shrink: 0; }
+
+/* ===== 密码弹窗 ===== */
+.password-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  background: rgba(30,15,8,0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.2s ease;
+}
+
+.password-dialog {
+  background: var(--card-bg);
+  border-radius: var(--radius-lg);
+  padding: 32px 28px;
+  width: 320px;
+  box-shadow: var(--shadow-xl);
+  text-align: center;
+}
+
+.password-dialog h3 { margin-bottom: 6px; font-size: 1.1rem; font-weight: 700; }
+
+.password-dialog .hint {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-bottom: 18px;
+}
+
+.password-dialog input {
+  width: 100%;
+  padding: 12px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  text-align: center;
+  font-size: 1.05rem;
+  letter-spacing: 4px;
+  margin-bottom: 16px;
+  transition: border-color 0.2s;
+}
+
+.password-dialog input:focus { border-color: var(--red); }
+
+.password-dialog .btn { width: 100%; }
+.password-error { color: var(--red); font-size: 0.78rem; margin-top: 10px; }
+
+.password-cancel {
+  display: block;
+  width: 100%;
+  margin-top: 10px;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  padding: 8px;
+}
+
+/* ===== 底部导航 ===== */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 150;
+  background: rgba(255,255,255,0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  display: flex;
+  border-top: 1px solid var(--border-light);
+  padding-bottom: var(--safe-bottom);
+  box-shadow: 0 -2px 20px rgba(140,90,60,0.06);
+}
+
+.nav-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 0 6px;
+  color: var(--text-muted);
+  font-size: 0.64rem;
+  font-weight: 500;
+  transition: color 0.2s;
+  cursor: pointer;
+  position: relative;
+}
+
+.nav-item.active { color: var(--red); }
+
+.nav-img {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+  margin-bottom: 1px;
+}
+
+.nav-item.active::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 20px;
+  height: 3px;
+  background: var(--red);
+  border-radius: 0 0 3px 3px;
+}
+
+/* ===== 分类选择面板 ===== */
+.category-panel {
+  position: fixed;
+  inset: 0;
+  z-index: 180;
+  display: flex;
+  align-items: flex-end;
+}
+
+.category-panel-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(30,15,8,0.40);
+  animation: fadeIn 0.25s ease;
+}
+
+.category-panel-content {
+  position: relative;
+  background: var(--card-bg);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 24px 20px;
+  padding-bottom: calc(28px + var(--safe-bottom));
+  animation: slideUp 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+.category-panel-content h3 {
+  text-align: center;
+  margin-bottom: 18px;
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+.category-panel-content .panel-handle {
+  width: 36px;
+  height: 4px;
+  background: var(--border);
+  border-radius: 2px;
+  margin: 0 auto 16px;
+}
+
+.category-panel-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+}
+
+.category-panel-grid .category-tag {
+  font-size: 0.9rem;
+  padding: 11px 24px;
+}
+
+/* ===== 团建套餐卡片 ===== */
+.team-packages { display: flex; flex-direction: column; gap: 12px; padding: 0 14px; }
+.team-pkg-card {
+  background: #fff; border-radius: var(--radius); padding: 16px;
+  box-shadow: var(--shadow-sm); border-left: 3px solid var(--red);
+}
+.team-pkg-header { font-size: 0.95rem; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+.team-pkg-subtitle { font-weight: 400; color: var(--red); margin-left: 6px; }
+.team-pkg-price { font-size: 1.2rem; font-weight: 700; color: var(--red); margin-bottom: 6px; }
+.team-pkg-unit { font-size: 0.75rem; font-weight: 400; color: var(--text-muted); }
+.team-pkg-tags { font-size: 0.72rem; color: var(--text-muted); margin-bottom: 8px; }
+.team-pkg-desc { font-size: 0.82rem; color: var(--text-secondary); line-height: 1.6; }
+
+/* ===== 团建图片展示 ===== */
+.team-gallery {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  padding: 0 14px;
+}
+.team-gallery-item {
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  background: var(--card-bg);
+}
+.team-gallery-item img {
+  width: 100%;
+  aspect-ratio: 4/3;
+  object-fit: cover;
+  display: block;
+}
+
+/* 后台团建图片列表 */
+.team-img-list .team-img-thumb {
+  width: 80px; height: 80px;
+  border-radius: 8px; object-fit: cover;
+  position: relative;
+}
+.team-img-wrap {
+  position: relative; display: inline-block;
+}
+.team-img-wrap .del-btn {
+  position: absolute; top: 2px; right: 2px;
+  width: 22px; height: 22px; border-radius: 50%;
+  background: rgba(0,0,0,0.5); color: #fff;
+  font-size: 0.7rem; display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+}
+
+/* ===== 动画 ===== */
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+
+/* ===== 大屏居中（保持移动端 2 列布局） ===== */
+@media (min-width: 480px) {
+  body {
+    max-width: 480px;
+    margin: 0 auto;
+    box-shadow: 0 0 60px rgba(140,90,60,0.08);
+    min-height: 100vh;
+    position: relative;
+  }
+  .bottom-nav {
+    left: 50%;
+    transform: translateX(-50%);
+    max-width: 480px;
+  }
+  .modal-content { max-width: 480px; }
+  .cards-grid { gap: 14px; }
+}
+
+/* 移动端 select 下拉箭头 */
+select {
+  -webkit-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%238C6E5C' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 36px !important;
+}
+</style>
+</head>
+<body>
+
+<!-- ==================== 顶部 Header ==================== -->
+<header class="app-header" id="appHeader">
+  <img src="tubiao/perfect.svg" alt="皖美的她" class="header-logo">
+  <div class="subtitle">非遗手作 · 匠心传承</div>
+</header>
+
+<!-- ==================== 分类标签 ==================== -->
+<div class="category-section" id="categorySection">
+  <div class="category-tabs" id="categoryTabs"><!-- JS 动态生成 --></div>
+</div>
+
+<!-- ==================== 卡片网格 ==================== -->
+<div class="cards-container" id="mainView">
+  <div class="cards-grid" id="cardsGrid"><!-- JS 动态生成 --></div>
+</div>
+
+<!-- ==================== 关于页面 ==================== -->
+<div id="aboutView" class="about-view hidden">
+  <div class="about-hero">
+    <div class="about-logo"><img src="tubiao/logo.svg" alt="皖美的她"></div>
+    <h2>皖美的她</h2>
+    <div class="about-tagline">非遗手作 · 女性赋能 · 城乡联动</div>
+  </div>
+
+  <div class="about-stats">
+    <div class="about-stat"><div class="num">100+</div><div class="label">女性就业带动</div></div>
+    <div class="about-stat"><div class="num">100+</div><div class="label">非遗手工培训活动</div></div>
+    <div class="about-stat"><div class="num">40+</div><div class="label">原创设计与著作权成果</div></div>
+  </div>
+
+  <div class="section-title">关于我们</div>
+  <div id="aboutContentArea"><!-- JS动态渲染 --></div>
+
+  <div class="section-title">联系我们</div>
+
+  <div class="contact-section">
+    <div class="contact-top">
+      <div class="contact-list">
+        <div class="contact-item">
+          <svg class="contact-svg-icon" viewBox="0 0 24 24" fill="#8c6e59">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm0 6c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z"/>
+          </svg>
+          <span id="aboutBrandSpan">品牌：皖美的她</span>
+        </div>
+        <div class="contact-item">
+          <svg class="contact-svg-icon" viewBox="0 0 24 24" fill="#8c6e59">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm0 6c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z"/>
+          </svg>
+          <span id="aboutPersonSpan">联系人：余海生</span>
+        </div>
+        <div class="contact-item">
+          <svg class="contact-svg-icon" viewBox="0 0 24 24" fill="#8c6e59">
+            <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
+          </svg>
+          <span id="aboutPhoneSpan">电话：13655644786</span>
+        </div>
+        <div class="contact-item">
+          <svg class="contact-svg-icon" viewBox="0 0 24 24" fill="#8c6e59">
+            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+          </svg>
+          <span id="aboutAddrSpan">地址：安徽省合肥市包河区滨湖中海环宇天地<br>菊园社区青创空间</span>
+        </div>
+      </div>
+      <div class="contact-qr-box">
+        <img src="tubiao/微信图片_20260616012143_449_260.png" alt="微信二维码">
+        <p class="qr-label">微信</p>
+      </div>
+    </div>
+
+    <div class="contact-qr-row">
+      <div class="contact-qr-card">
+        <img src="tubiao/0b258aaf9810131e216492d4a6e95fcf.jpg" alt="公众号二维码">
+        <p class="qr-label">微信公众号</p>
+      </div>
+      <div class="contact-qr-card">
+        <img src="tubiao/微信图片_20260616012204_450_260.png" alt="小红书二维码">
+        <p class="qr-label">小红书</p>
+      </div>
+      <div class="contact-qr-card">
+        <img src="tubiao/微信图片_20260616012131_448_260.png" alt="视频号二维码">
+        <p class="qr-label">视频号</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== 团建定制 ==================== -->
+<div id="teamView" class="about-view hidden">
+  <div style="text-align:center;padding:16px 0 8px;">
+    <h2 style="font-size:1.15rem;font-weight:700;color:var(--red-dark);">皖美的她｜团建定制</h2>
+    <p style="font-size:0.78rem;color:var(--text-muted);margin-top:2px;">企业团建 · 非遗体验 · 手工定制</p>
+  </div>
+
+  <!-- 团建套餐（JS动态渲染，后台可编辑） -->
+  <div class="team-packages" id="teamPackages"></div>
+
+  <!-- 往期活动 -->
+  <div class="section-title">往期活动</div>
+  <div class="team-gallery" id="teamGallery">
+    <p style="text-align:center;color:var(--text-muted);padding:30px;grid-column:1/-1;">暂无活动图片，请在管理后台上传</p>
+  </div>
+  </div>
+
+<!-- ==================== 管理后台 ==================== -->
+<div id="adminView" class="admin-panel hidden">
+  <div class="admin-topbar">
+    <h2>⚙️ 管理后台</h2>
+    <button class="btn btn-outline btn-sm" id="adminLogout">← 返回首页</button>
+  </div>
+
+  <!-- 管理 Tab 切换 -->
+  <div style="display:flex;gap:10px;margin-bottom:16px;">
+    <button class="btn btn-primary btn-sm admin-tab active" data-tab="works">📋 作品管理</button>
+    <button class="btn btn-outline btn-sm admin-tab" data-tab="team">🎁 团建图片</button>
+    <button class="btn btn-outline btn-sm admin-tab" data-tab="about">📝 关于页面</button>
+  </div>
+
+  <!-- ===== 作品管理区域 ===== -->
+  <div id="adminWorksSection">
+    <div class="toolbar">
+      <button class="btn btn-outline btn-sm" id="exportBtn">📥 导出数据</button>
+      <button class="btn btn-outline btn-sm" id="importBtn">📤 导入数据</button>
+    </div>
+    <input type="file" id="importFileInput" accept=".json" class="hidden">
+
+    <div class="admin-form" id="adminForm">
+      <div class="form-section-title" id="formTitle">➕ 添加新作品</div>
+      <input type="hidden" id="editId">
+      <div class="form-group">
+        <label>作品图片<span class="required-star">*</span></label>
+        <div class="image-upload-area" id="imageUploadArea">
+          <span>📷 点击或拖拽上传图片（自动压缩至 800px）</span>
+        </div>
+        <input type="file" id="imageFileInput" accept="image/*" class="hidden">
+        <img class="image-preview" id="imagePreview" alt="预览">
+      </div>
+      <div class="form-group">
+        <label>作品名称<span class="required-star">*</span></label>
+        <input type="text" id="inputName" placeholder="如：广玉兰绒花发簪" required>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>分类<span class="required-star">*</span></label>
+          <select id="inputCategory">
+            <option value="">请选择</option>
+            <option>耳饰</option><option>戒指</option><option>发卡</option>
+            <option>胸针</option><option>发簪</option><option>装饰作品</option><option>其他</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>价格 (¥)<span class="required-star">*</span></label>
+          <input type="number" id="inputPrice" placeholder="129" min="0" step="0.01" required>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>详细描述</label>
+        <textarea id="inputDesc" placeholder="作品详细介绍（100字以内）" maxlength="100"></textarea>
+      </div>
+      <div class="form-group">
+        <label>工艺 / 技艺说明</label>
+        <input type="text" id="inputCraft" placeholder="如：非遗绒花掐丝工艺">
+      </div>
+      <div class="form-actions">
+        <button class="btn btn-primary btn-block" id="submitBtn">✅ 添加作品</button>
+        <button class="btn btn-outline btn-sm hidden" id="cancelEditBtn">取消编辑</button>
+      </div>
+    </div>
+    <div class="admin-section-label">📋 现有作品（共 <span id="workCount">0</span> 件）</div>
+    <div class="admin-work-list" id="adminWorkList"></div>
+  </div>
+
+  <!-- ===== 团建图片管理区域 ===== -->
+  <div id="adminTeamSection" class="hidden">
+    <!-- 套餐卡片管理 -->
+    <div class="admin-form">
+      <div class="form-section-title">📦 团建套餐卡片（<span id="teamPkgCount">0</span>个）</div>
+      <div id="teamPkgEditList"></div>
+      <button class="btn btn-outline btn-sm btn-block" id="addTeamPkgBtn" style="margin-top:10px;">➕ 新增套餐卡片</button>
+    </div>
+    <!-- 图片管理 -->
+    <div class="admin-form" style="margin-top:12px;">
+      <div class="form-section-title">🎁 团建图片（共 <span id="teamImgCount">0</span> 张）</div>
+      <div class="form-group">
+        <label>批量上传图片（可多选）</label>
+        <div class="image-upload-area" id="teamImgUploadArea">
+          <span>📷 点击选择多张图片（自动压缩，可多选）</span>
+        </div>
+        <input type="file" id="teamImgFileInput" accept="image/*" multiple class="hidden">
+      </div>
+      <div class="team-img-list" id="teamImgList" style="display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;"></div>
+    </div>
+  </div>
+
+  <!-- ===== 关于页面编辑区域 ===== -->
+  <div id="adminAboutSection" class="hidden">
+    <div class="admin-form">
+      <div class="form-section-title">📝 关于我们（每段一个输入框）</div>
+      <div id="aboutParagraphsEdit"></div>
+      <button class="btn btn-outline btn-sm" id="addAboutParaBtn" style="margin-top:8px;">➕ 新增段落</button>
+    </div>
+    <div class="admin-form" style="margin-top:12px;">
+      <div class="form-section-title">📞 联系我们</div>
+      <div class="form-row">
+        <div class="form-group"><label>品牌名</label><input type="text" id="aboutBrand" placeholder="皖美的她"></div>
+        <div class="form-group"><label>联系人</label><input type="text" id="aboutPerson" placeholder="余海生"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>电话</label><input type="text" id="aboutPhone" placeholder="13655644786"></div>
+        <div class="form-group"><label>邮箱</label><input type="text" id="aboutEmail" placeholder="wanmeideta@example.com"></div>
+      </div>
+      <div class="form-group"><label>地址</label><input type="text" id="aboutAddress" placeholder="安徽省合肥市包河区..."></div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== 详情模态框 ==================== -->
+<div class="modal-overlay hidden" id="detailModal">
+  <div class="modal-content">
+    <div class="modal-image-wrapper">
+      <button class="modal-close" id="modalClose">✕</button>
+      <img class="modal-image" id="modalImage" alt="">
+    </div>
+    <div class="modal-body">
+      <h2 class="modal-title" id="modalTitle"></h2>
+      <div class="modal-price" id="modalPrice"></div>
+      <div class="modal-craft" id="modalCraft"></div>
+      <p class="modal-description" id="modalDesc"></p>
+      <div class="modal-sales" id="modalSales"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== 密码验证弹窗 ==================== -->
+<div class="password-modal hidden" id="passwordModal">
+  <div class="password-dialog">
+    <h3>🔐 管理员验证</h3>
+    <p class="hint">请输入密码以进入管理后台</p>
+    <input type="password" id="passwordInput" placeholder="请输入密码" maxlength="20">
+    <button class="btn btn-primary" id="passwordSubmit">验证进入</button>
+    <p class="password-error hidden" id="passwordError">密码错误，请重试</p>
+    <button class="password-cancel" id="passwordCancel">取消</button>
+  </div>
+</div>
+
+<!-- ==================== 分类选择面板 ==================== -->
+<div class="category-panel hidden" id="categoryPanel">
+  <div class="category-panel-backdrop" id="categoryPanelBackdrop"></div>
+  <div class="category-panel-content">
+    <div class="panel-handle"></div>
+    <h3>📂 选择分类</h3>
+    <div class="category-panel-grid" id="categoryPanelGrid"><!-- JS 动态生成 --></div>
+  </div>
+</div>
+
+<!-- ==================== 底部导航 ==================== -->
+<nav class="bottom-nav" id="bottomNav">
+  <button class="nav-item active" data-view="main"><img src="tubiao/home.svg" alt="首页" class="nav-img"><span>首页</span></button>
+  <button class="nav-item" data-view="team"><img src="tubiao/gift.svg" alt="团建定制" class="nav-img"><span>团建定制</span></button>
+  <button class="nav-item" data-view="about"><img src="tubiao/informationpng.svg" alt="关于" class="nav-img"><span>关于</span></button>
+  <button class="nav-item" data-view="admin"><img src="tubiao/setting.svg" alt="管理" class="nav-img"><span>管理</span></button>
+</nav>
+
+<script>
+/* =====================================================================
+   "皖美的她" — 非遗手工作品 H5
+   配色：朱砂红#B83838 · 墨绿#1A5948 · 宣纸#F9F6ED
+   存储：localStorage (wanmei_works)
+   ===================================================================== */
+
+var STORAGE_KEY   = 'wanmei_works';
+var TEAM_IMG_KEY  = 'wanmei_team_images';
+var TEAM_PKG_KEY  = 'wanmei_team_pkgs';
+var ABOUT_KEY     = 'wanmei_about';
+var ADMIN_PW      = 'admin123';
+var MAX_DIM       = 800;
+var QUALITY       = 0.7;
+
+var works         = [];
+var teamImages    = [];
+var teamPackages  = [];
+var aboutParagraphs = [];
+var aboutContact   = {};
+var currentFilter = '全部';
+var currentView   = 'main';
+var editingImage  = null;
+
+// 固定7分类（仅绒花按佩戴场景分类）
+var CATEGORIES = ['全部','耳饰','戒指','发卡','胸针','发簪','装饰作品','其他'];
+
+function $(sel)  { return document.querySelector(sel); }
+function $$(sel) { return document.querySelectorAll(sel); }
+
+// ==================== 数据加载 ====================
+function loadData() {
+  try {
+    var raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) { works = JSON.parse(raw); if (!Array.isArray(works)) works = []; }
+  } catch(e) { works = []; }
+  if (!works.length) { works = getSamples(); saveData(); }
+}
+
+function saveData() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(works)); }
+  catch(e) { alert('存储空间不足！'); }
+}
+
+// ==================== 团建图片管理 ====================
+function loadTeamImages() {
+  try { var r = localStorage.getItem(TEAM_IMG_KEY); teamImages = r ? JSON.parse(r) : []; if (!Array.isArray(teamImages)) teamImages = []; }
+  catch(e) { teamImages = []; }
+}
+function saveTeamImages() {
+  try { localStorage.setItem(TEAM_IMG_KEY, JSON.stringify(teamImages)); }
+  catch(e) { alert('存储空间不足！'); }
+}
+function renderTeamGallery() {
+  var g = $('#teamGallery');
+  if (!g) return;
+  if (!teamImages.length) {
+    g.innerHTML = '<p style="text-align:center;color:var(--text-muted);padding:40px;grid-column:1/-1;">暂无团建展示图片，请在管理后台上传</p>';
+    g.style.display = 'block';
+    return;
+  }
+  g.style.display = 'grid';
+  g.innerHTML = teamImages.map(function(img, i){
+    return '<div class="team-gallery-item"><img src="'+img+'" alt="团建展示'+(i+1)+'" loading="lazy"></div>';
+  }).join('');
+}
+function renderTeamImgList() {
+  var list = $('#teamImgList');
+  $('#teamImgCount').textContent = teamImages.length;
+  if (!teamImages.length) { list.innerHTML = '<span style="color:var(--text-muted);font-size:0.8rem;">暂无图片</span>'; return; }
+  list.innerHTML = teamImages.map(function(img, i){
+    return '<div class="team-img-wrap"><img class="team-img-thumb" src="'+img+'"><span class="del-btn" data-tidx="'+i+'">✕</span></div>';
+  }).join('');
+  list.querySelectorAll('.del-btn').forEach(function(b){
+    b.addEventListener('click', function(){
+      var idx = parseInt(b.dataset.tidx);
+      if (confirm('删除这张团建图片？')) { teamImages.splice(idx, 1); saveTeamImages(); renderTeamImgList(); renderTeamGallery(); }
+    });
+  });
+}
+
+// ==================== 团建套餐管理 ====================
+function getDefaultPkgs(){
+  return [
+    {header:'① 基础体验款',subtitle:'轻享绒花体验',price:'¥69',unit:'/人',tags:'入门体验 · 文化感知 · 轻团建',desc:'简易绒花胸针/小花制作、非遗文化讲解、基础材料包体验'},
+    {header:'② 创意升级款',subtitle:'绒花美学手作团建',price:'¥99–159',unit:'/人',tags:'设计感 · 手工创作',desc:'非遗文化讲解、进阶绒花作品（玉兰花/桂花/主题花）创作体验'},
+    {header:'③ 品牌定制款',subtitle:'高端定制绒花团建',price:'¥200–399',unit:'/人或项目制',tags:'品牌定制 · 企业文化',desc:'定制主题团建流程、企业视觉结合拍摄记录、成果作品展示'},
+    {header:'④ 批量团购款',subtitle:'企业采购与活动供应',price:'按量阶梯',unit:'报价',tags:'规模采购 · 标准化供给 · 礼品输出',desc:'标准绒花产品批量供应、企业礼品套装、员工福利/节日礼盒、可附定制包装。'}
+  ];
+}
+function loadTeamPkgs(){
+  try { var r=localStorage.getItem(TEAM_PKG_KEY); teamPackages=r?JSON.parse(r):[]; if(!Array.isArray(teamPackages)||!teamPackages.length) teamPackages=getDefaultPkgs(); }
+  catch(e){ teamPackages=getDefaultPkgs(); }
+}
+function saveTeamPkgs(){ try{localStorage.setItem(TEAM_PKG_KEY,JSON.stringify(teamPackages));}catch(e){} }
+function renderTeamPkgs(){
+  var el=$('#teamPackages'); if(!el) return;
+  el.innerHTML = teamPackages.map(function(p,i){
+    return '<div class="team-pkg-card">'+
+      '<div class="team-pkg-header">'+(i+1)+' '+p.header+'<span class="team-pkg-subtitle">'+p.subtitle+'</span></div>'+
+      '<div class="team-pkg-price">'+p.price+'<span class="team-pkg-unit">'+p.unit+'</span></div>'+
+      '<div class="team-pkg-tags">'+p.tags+'</div>'+
+      '<div class="team-pkg-desc">'+p.desc+'</div></div>';
+  }).join('');
+}
+
+// ==================== 占位图 ====================
+// ==================== 关于页面数据管理 ====================
+function getDefaultAbout(){
+  return {
+    paragraphs: [
+      '非遗手工掐丝绒花，选用优质蚕丝线与铜丝骨架，以掐丝定形、拴绒成韵为核心工艺，经梳绒、拴绒、打尖、夹扁、烫平、定型、掐丝、传花等多道纯手工工序精制而成。工艺繁复细腻，形态灵动典雅，是东方传统审美与匠心技艺的当代表达。',
+      '"绒数生花"是一个专注绒花非遗技艺的城乡联动型女性手工品牌。',
+      '项目扎根安徽，以绒花为唯一核心产品方向，聚焦非遗活化与女性就业双重目标，通过构建"培训+生产+产品+市场"的完整手工产业链，推动绒花从传统工艺走向现代生活消费体系。',
+      '品牌培训体系重点面向乡村留守妇女、下岗职工、待业宝妈等群体，通过系统化绒花技能培训与灵活就业机制，帮助其掌握一技之长，实现稳定增收与自我价值提升。',
+      '在城市端与乡村端的双向联动中，品牌构建"技能培训—手作生产—产品转化—市场销售"的可持续路径，让女性从学习者逐步成长为手作参与者、产品生产者与价值创造者。',
+      '目前已形成以绒花饰品、城市文创礼盒与体验课程为核心的产品体系，并逐步拓展企业团建、城市礼赠与文化活动合作场景，构建可复制的轻资产非遗商业模型。',
+      '我们相信，绒花不仅是一种手工技艺，更是一种可以连接就业与生活的文化生产力。以非遗之美赋能女性，以手作之力连接城乡，让传统绒花在当代生活中持续生长。'
+    ],
+    contact: { brand:'皖美的她', person:'余海生', phone:'13655644786', email:'wanmeideta@example.com', address:'安徽省合肥市包河区滨湖中海环宇天地 菊园社区青创空间' }
+  };
+}
+function loadAbout(){
+  try { var r=localStorage.getItem(ABOUT_KEY); if(r){ var d=JSON.parse(r); aboutParagraphs=d.paragraphs||[]; aboutContact=d.contact||{}; } }
+  catch(e){}
+  if(!aboutParagraphs.length){ var def=getDefaultAbout(); aboutParagraphs=def.paragraphs; aboutContact=def.contact; saveAbout(); }
+}
+function saveAbout(){ try{localStorage.setItem(ABOUT_KEY,JSON.stringify({paragraphs:aboutParagraphs,contact:aboutContact}));}catch(e){} }
+
+function renderAboutPage(){
+  // 关于我们段落
+  var aboutEl = $('#aboutContentArea');
+  if(aboutEl) aboutEl.innerHTML = aboutParagraphs.map(function(p){ return '<p>'+p+'</p>'; }).join('');
+  // 联系我们
+  var c = aboutContact;
+  var brandEl = $('#aboutBrandSpan'); if(brandEl) brandEl.textContent = '品牌：'+(c.brand||'');
+  var personEl = $('#aboutPersonSpan'); if(personEl) personEl.textContent = '联系人：'+(c.person||'');
+  var phoneEl = $('#aboutPhoneSpan'); if(phoneEl) phoneEl.textContent = '电话：'+(c.phone||'');
+  var addrEl = $('#aboutAddrSpan'); if(addrEl) addrEl.textContent = '地址：'+(c.address||'');
+}
+
+// 后台关于页面编辑
+function renderAboutEdit(){
+  var el = $('#aboutParagraphsEdit'); if(!el) return;
+  el.innerHTML = aboutParagraphs.map(function(p,i){
+    return '<div style="display:flex;gap:6px;margin-bottom:6px;">'+
+      '<textarea data-apidx="'+i+'" style="flex:1;padding:8px;border:1px solid var(--border);border-radius:6px;font-size:0.8rem;min-height:50px;">'+p+'</textarea>'+
+      '<button class="btn btn-danger btn-xs" data-apdel="'+i+'" style="flex-shrink:0;align-self:flex-start;">✕</button></div>';
+  }).join('');
+  el.querySelectorAll('[data-apidx]').forEach(function(ta){
+    ta.addEventListener('input',function(){ aboutParagraphs[parseInt(ta.dataset.apidx)]=ta.value; saveAbout(); renderAboutPage(); });
+  });
+  el.querySelectorAll('[data-apdel]').forEach(function(b){
+    b.addEventListener('click',function(){ aboutParagraphs.splice(parseInt(b.dataset.apdel),1); saveAbout(); renderAboutEdit(); renderAboutPage(); });
+  });
+  // 联系字段
+  var fields = {aboutBrand:'brand',aboutPerson:'person',aboutPhone:'phone',aboutEmail:'email',aboutAddress:'address'};
+  Object.keys(fields).forEach(function(id){
+    var inp = document.getElementById(id); if(!inp) return;
+    inp.value = aboutContact[fields[id]] || '';
+    inp.oninput = function(){ aboutContact[fields[id]]=inp.value; saveAbout(); renderAboutPage(); };
+  });
+}
+document.addEventListener('DOMContentLoaded', function(){
+  var addBtn = document.getElementById('addAboutParaBtn');
+  if(addBtn) addBtn.addEventListener('click',function(){ aboutParagraphs.push('新段落'); saveAbout(); renderAboutEdit(); renderAboutPage(); });
+});
+
+function placeholder(label, hue) {
+  var c = document.createElement('canvas'); c.width = 400; c.height = 400;
+  var ctx = c.getContext('2d');
+  var g = ctx.createLinearGradient(0,0,400,400);
+  g.addColorStop(0,   'hsl('+hue+',50%,68%)');
+  g.addColorStop(0.5, 'hsl('+hue+',60%,78%)');
+  g.addColorStop(1,   'hsl('+hue+',40%,88%)');
+  ctx.fillStyle = g; ctx.fillRect(0,0,400,400);
+  ctx.fillStyle = 'rgba(255,255,255,0.25)';
+  ctx.beginPath(); ctx.arc(320,80,60,0,Math.PI*2); ctx.fill();
+  ctx.beginPath(); ctx.arc(60,320,40,0,Math.PI*2); ctx.fill();
+  ctx.fillStyle = 'rgba(255,255,255,0.90)';
+  ctx.font = 'bold 24px "PingFang SC","Microsoft YaHei","Noto Serif SC",sans-serif';
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.fillText(label, 200, 208);
+  return c.toDataURL('image/jpeg', 0.6);
+}
+
+// ==================== 示例数据（10件，全部绒花） ====================
+function getSamples() {
+  var now = Date.now();
+  var list = [
+    { id:now+1,  name:'广玉兰绒花发簪',   desc:'以合肥市花广玉兰为灵感，纯手工绒花掐丝工艺，蚕丝制作，花瓣层次丰富，寓意高洁清雅。',     price:129, category:'发簪',     craft:'非遗绒花掐丝工艺' },
+    { id:now+2,  name:'梅花绒花耳坠',     desc:'以梅花为造型的绒花耳坠，小巧玲珑，配色雅致。纯手工制作，每片花瓣经过精心修剪，佩戴轻盈。',       price:89,  category:'耳饰',     craft:'非遗绒花手工技艺' },
+    { id:now+3,  name:'桂花绒花发卡',     desc:'以桂花为原型的绒花发卡，温暖金色系设计，适合日常佩戴。精致小巧，为发型增添一抹秋日暖意。',       price:59,  category:'发卡',     craft:'非遗绒花手工技艺' },
+    { id:now+4,  name:'牡丹绒花胸针',     desc:'以牡丹为原型的绒花胸针，雍容华贵。多层花瓣设计，色彩饱满，可搭配正装或旗袍，尽显东方韵味。',       price:99,  category:'胸针',     craft:'非遗绒花掐丝工艺' },
+    { id:now+5,  name:'绒花戒指·蝶恋花',  desc:'蝶恋花主题绒花戒指，将非遗技艺凝聚于方寸之间。精致蝴蝶与花朵造型，可调节戒圈，日常可佩戴。',         price:69,  category:'戒指',     craft:'非遗绒花微型工艺' },
+    { id:now+6,  name:'喜上梅梢绒花盆景', desc:'喜鹊登梅主题绒花盆景装饰，底座为手工木质花盆，绒花梅花栩栩如生。适合家居摆设或赠送亲友。',           price:299, category:'装饰作品', craft:'非遗绒花造景工艺' },
+    { id:now+7,  name:'平安如意绒花车挂', desc:'平安如意主题绒花车挂，以传统吉祥纹样为元素设计。小巧不挡视线，为出行增添一份平安祝福。',           price:79,  category:'其他',     craft:'非遗绒花手工技艺' },
+    { id:now+8,  name:'紫玉兰绒花发簪',   desc:'以紫玉兰为原型，温润紫粉色系，优雅大方。纯手工绒花工艺，每朵花需经历搓丝、打尖、传花等多道工序。',   price:149, category:'发簪',     craft:'非遗绒花掐丝工艺' },
+    { id:now+9,  name:'桃花绒花耳钉',     desc:'以桃花为原型的绒花耳钉，粉嫩色系适合春夏搭配。小巧轻盈，佩戴舒适，是日常穿搭的点睛之笔。',           price:69,  category:'耳饰',     craft:'非遗绒花手工技艺' },
+    { id:now+10, name:'兰花绒花胸针',     desc:'以兰花为造型的绒花胸针，淡雅配色凸显文人气韵。手工层层堆叠花瓣，立体感强，适合文艺风格搭配。',         price:89,  category:'胸针',     craft:'非遗绒花掐丝工艺' }
+  ];
+  var hues = { '发簪':350, '耳饰':10, '发卡':40, '胸针':330, '戒指':20, '装饰作品':160, '其他':100 };
+  list.forEach(function(w) { w.image = placeholder(w.name.slice(0,4), hues[w.category]||300); });
+  return list;
+}
+
+// ==================== 图片压缩 ====================
+function compressImage(file) {
+  return new Promise(function(resolve, reject) {
+    if (!file.type.startsWith('image/')) { reject(new Error('请选择图片文件')); return; }
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      var img = new Image();
+      img.onload = function() {
+        var w=img.width, h=img.height;
+        if (w>MAX_DIM||h>MAX_DIM) { if(w>h){h=Math.round(h*MAX_DIM/w);w=MAX_DIM;}else{w=Math.round(w*MAX_DIM/h);h=MAX_DIM;} }
+        var c=document.createElement('canvas'); c.width=w; c.height=h;
+        c.getContext('2d').drawImage(img,0,0,w,h);
+        resolve(c.toDataURL('image/jpeg',QUALITY));
+      };
+      img.onerror = function(){ reject(new Error('图片加载失败')); };
+      img.src = e.target.result;
+    };
+    reader.onerror = function(){ reject(new Error('文件读取失败')); };
+    reader.readAsDataURL(file);
+  });
+}
+
+// ==================== 筛选 ====================
+function filtered() {
+  if (currentFilter === '全部') return works;
+  return works.filter(function(w){ return w.category === currentFilter; });
+}
+
+// ==================== 渲染分类标签 ====================
+function renderTabs() {
+  var h = CATEGORIES.map(function(c){
+    return '<button class="category-tag'+(c===currentFilter?' active':'')+'" data-cat="'+c+'">'+c+'</button>';
+  }).join('');
+  $('#categoryTabs').innerHTML = h;
+  $('#categoryPanelGrid').innerHTML = h;
+  [$('#categoryTabs'),$('#categoryPanelGrid')].forEach(function(ct){
+    ct.querySelectorAll('.category-tag').forEach(function(t){
+      t.addEventListener('click',function(){
+        currentFilter = t.dataset.cat;
+        hideCategoryPanel(); renderAll();
+      });
+    });
+  });
+}
+
+// ==================== 渲染卡片 ====================
+function renderCards() {
+  var grid = $('#cardsGrid');
+  var list = filtered();
+  if (!list.length) {
+    grid.innerHTML = '<div class="empty-state"><p style="font-size:2rem;">📭</p><p>暂无作品</p><p style="font-size:0.78rem;margin-top:4px;">该分类下还没有作品</p></div>';
+    return;
+  }
+  grid.innerHTML = list.map(function(w){
+    return '<div class="card" data-id="'+w.id+'">'+
+      '<img class="card-image" src="'+w.image+'" alt="'+w.name+'" loading="lazy">'+
+      '<div class="card-body">'+
+      '<span class="card-category-badge">'+(w.category||'未分类')+'</span>'+
+      '<div class="card-title">'+w.name+'</div>'+
+      '<div class="card-meta">'+
+      '<span class="card-price"><span class="symbol">¥</span>'+w.price+'</span>'+
+      '<span class="card-sales">'+(w.craft||'纯手工制作')+'</span>'+
+      '</div></div></div>';
+  }).join('');
+  grid.querySelectorAll('.card').forEach(function(c){
+    c.addEventListener('click',function(){ showModal(Number(c.dataset.id)); });
+  });
+}
+
+// ==================== 模态框 ====================
+function showModal(id) {
+  var w = works.find(function(x){ return x.id===id; }); if (!w) return;
+  $('#modalImage').src = w.image; $('#modalImage').alt = w.name;
+  $('#modalTitle').textContent = w.name;
+  $('#modalPrice').innerHTML = '<span class="symbol">¥</span>'+w.price;
+  $('#modalDesc').textContent = w.desc || '暂无详细描述';
+  $('#modalCraft').textContent = w.craft ? '🪡 '+w.craft : '';
+  $('#modalSales').textContent = '';
+  $('#detailModal').classList.remove('hidden'); document.body.style.overflow = 'hidden';
+}
+function hideModal() { $('#detailModal').classList.add('hidden'); document.body.style.overflow = ''; }
+
+// ==================== 分类面板 ====================
+function showCategoryPanel() { renderTabs(); $('#categoryPanel').classList.remove('hidden'); }
+function hideCategoryPanel()  { $('#categoryPanel').classList.add('hidden'); }
+
+// ==================== 视图切换 ====================
+function showView(view) {
+  currentView = view;
+  $('#mainView').classList.add('hidden');
+  $('#aboutView').classList.add('hidden');
+  $('#teamView').classList.add('hidden');
+  $('#adminView').classList.add('hidden');
+  var heads = [$('#appHeader'),$('#categorySection')];
+  heads.forEach(function(el){ if(el) el.style.display = (view==='main')?'':'none'; });
+  if (view==='main') { $('#mainView').classList.remove('hidden'); renderCards(); }
+  else if (view==='about') { $('#aboutView').classList.remove('hidden'); renderAboutPage(); }
+  else if (view==='team') { $('#teamView').classList.remove('hidden'); renderTeamPkgs(); renderTeamGallery(); }
+  else if (view==='admin') { if($('#adminView').classList.contains('hidden')){showPwModal();return;} }
+  $$('.nav-item').forEach(function(el){ el.classList.toggle('active',el.dataset.view===view); });
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function enterAdmin() {
+  [$('#appHeader'),$('#categorySection')].forEach(function(el){if(el)el.style.display='none';});
+  $('#mainView').classList.add('hidden'); $('#aboutView').classList.add('hidden'); $('#teamView').classList.add('hidden');
+  $('#adminView').classList.remove('hidden'); currentView='admin';
+  $$('.nav-item').forEach(function(el){el.classList.toggle('active',el.dataset.view==='admin');});
+  renderAdminList();
+  $('#adminWorksSection').classList.remove('hidden');
+  $('#adminTeamSection').classList.add('hidden');
+  $('#adminAboutSection').classList.add('hidden');
+  $$('.admin-tab').forEach(function(t){t.classList.remove('active','btn-primary');t.classList.add('btn-outline');});
+  var worksTab = document.querySelector('.admin-tab[data-tab="works"]');
+  if (worksTab) { worksTab.classList.add('active','btn-primary'); worksTab.classList.remove('btn-outline'); }
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// ==================== 密码 ====================
+function showPwModal() { $('#passwordModal').classList.remove('hidden'); $('#passwordInput').value=''; $('#passwordError').classList.add('hidden'); setTimeout(function(){$('#passwordInput').focus();},150); }
+function hidePwModal() { $('#passwordModal').classList.add('hidden'); if(currentView==='admin'&&$('#adminView').classList.contains('hidden'))showView('main'); }
+
+// ==================== 后台列表 ====================
+function renderAdminList() {
+  var list = $('#adminWorkList'); $('#workCount').textContent = works.length;
+  if (!works.length) { list.innerHTML = '<p style="text-align:center;color:var(--text-muted);padding:40px;">暂无作品，请添加</p>'; return; }
+  list.innerHTML = works.map(function(w){
+    return '<div class="admin-work-item">'+
+      '<img class="admin-work-thumb" src="'+w.image+'" alt="'+w.name+'">'+
+      '<div class="admin-work-info"><div class="name">'+w.name+'</div><div class="meta">'+w.category+' · ¥'+w.price+'</div></div>'+
+      '<div class="admin-work-actions">'+
+      '<button class="btn btn-outline btn-xs" data-edit="'+w.id+'">✏️ 编辑</button>'+
+      '<button class="btn btn-danger btn-xs" data-del="'+w.id+'">🗑️</button>'+
+      '</div></div>';
+  }).join('');
+  list.querySelectorAll('[data-edit]').forEach(function(b){
+    b.addEventListener('click',function(){ editWork(Number(b.dataset.edit)); $('#adminForm').scrollIntoView({behavior:'smooth'}); });
+  });
+  list.querySelectorAll('[data-del]').forEach(function(b){
+    b.addEventListener('click',function(){
+      var id=Number(b.dataset.del), w=works.find(function(x){return x.id===id;});
+      if(confirm('确定删除"'+(w?w.name:'')+'"？不可恢复。')) deleteWork(id);
+    });
+  });
+}
+
+// ==================== 表单操作 ====================
+function resetForm() {
+  $('#editId').value=''; $('#formTitle').innerHTML='➕ 添加新作品';
+  $('#inputName').value=''; $('#inputCategory').value=''; $('#inputPrice').value='';
+  $('#inputDesc').value=''; $('#inputCraft').value='';
+  $('#imagePreview').src=''; editingImage=null;
+  $('#submitBtn').textContent='✅ 添加作品'; $('#cancelEditBtn').classList.add('hidden');
+  $('#imageFileInput').value='';
+}
+
+function editWork(id) {
+  var w = works.find(function(x){return x.id===id;}); if(!w) return;
+  $('#editId').value=w.id; $('#formTitle').innerHTML='✏️ 编辑作品';
+  $('#inputName').value=w.name; $('#inputCategory').value=w.category||'';
+  $('#inputPrice').value=w.price; $('#inputDesc').value=w.desc||'';
+  $('#inputCraft').value=w.craft||'';
+  $('#imagePreview').src=w.image; editingImage=w.image;
+  $('#submitBtn').textContent='💾 保存修改'; $('#cancelEditBtn').classList.remove('hidden');
+}
+
+function addOrUpdate(data) {
+  var eid = $('#editId').value;
+  if (eid) { var i=works.findIndex(function(w){return w.id===Number(eid);}); if(i!==-1)works[i]=Object.assign({},works[i],data,{id:works[i].id}); }
+  else works.unshift(Object.assign({id:Date.now()},data));
+  saveData(); resetForm(); renderAdminList(); renderCards(); renderTabs();
+}
+
+function deleteWork(id) { works=works.filter(function(w){return w.id!==id;}); saveData(); renderAdminList(); renderCards(); renderTabs(); }
+
+// ==================== 导入/导出 ====================
+function exportData() {
+  var json = JSON.stringify(works,null,2);
+  var blob = new Blob([json],{type:'application/json'});
+  var a=document.createElement('a'); a.href=URL.createObjectURL(blob);
+  a.download='works_backup.json'; document.body.appendChild(a); a.click(); document.body.removeChild(a);
+}
+
+function importData(file) {
+  var reader = new FileReader();
+  reader.onload = function(e){
+    try {
+      var data = JSON.parse(e.target.result);
+      if(!Array.isArray(data)) throw new Error('格式不正确');
+      if(confirm('导入 '+data.length+' 件作品？\n"确定"=替换全部  "取消"=合并')){works=data;}else{
+        var ids={}; works.forEach(function(w){ids[w.id]=true;});
+        works = data.filter(function(x){return !ids[x.id];}).concat(works);
+      }
+      saveData(); renderAdminList(); renderCards(); renderTabs(); alert('✅ 导入成功');
+    }catch(err){alert('❌ 导入失败：'+err.message);}
+  };
+  reader.readAsDataURL(file);
+}
+
+// ==================== 全局渲染 ====================
+function renderAll() { renderTabs(); renderCards(); if(!$('#adminView').classList.contains('hidden'))renderAdminList(); }
+
+// ==================== 事件绑定 ====================
+function bindEvents() {
+  $('#modalClose').addEventListener('click',hideModal);
+  $('#detailModal').addEventListener('click',function(e){ if(e.target===$('#detailModal'))hideModal(); });
+  $('#categoryPanelBackdrop').addEventListener('click',hideCategoryPanel);
+  $('#passwordSubmit').addEventListener('click',function(){ if($('#passwordInput').value===ADMIN_PW){hidePwModal();enterAdmin();}else{$('#passwordError').classList.remove('hidden');$('#passwordInput').value='';$('#passwordInput').focus();} });
+  $('#passwordInput').addEventListener('keydown',function(e){ if(e.key==='Enter')$('#passwordSubmit').click(); });
+  $('#passwordCancel').addEventListener('click',hidePwModal);
+  $$('.nav-item').forEach(function(item){ item.addEventListener('click',function(){ var v=item.dataset.view; if(v==='team'){ hideCategoryPanel(); showView('team'); }else if(v==='admin'){ if($('#adminView').classList.contains('hidden'))showPwModal();else showView('admin'); }else{hideCategoryPanel();showView(v);} }); });
+  // 图片上传
+  var ua=$('#imageUploadArea'), fi=$('#imageFileInput');
+  ua.addEventListener('click',function(){fi.click();});
+  ua.addEventListener('dragover',function(e){e.preventDefault();ua.classList.add('drag-over');});
+  ua.addEventListener('dragleave',function(){ua.classList.remove('drag-over');});
+  ua.addEventListener('drop',function(e){e.preventDefault();ua.classList.remove('drag-over');if(e.dataTransfer.files[0])handleImg(e.dataTransfer.files[0]);});
+  fi.addEventListener('change',function(){if(fi.files[0])handleImg(fi.files[0]);});
+  function handleImg(file){ ua.querySelector('span').textContent='压缩中…'; compressImage(file).then(function(u){editingImage=u;$('#imagePreview').src=u;ua.querySelector('span').textContent='📷 点击或拖拽重新上传';}).catch(function(e){alert('❌ '+e.message);ua.querySelector('span').textContent='📷 点击或拖拽上传图片（自动压缩至 800px）';}); }
+  $('#submitBtn').addEventListener('click',function(){ var n=$('#inputName').value.trim(),c=$('#inputCategory').value,p=parseFloat($('#inputPrice').value); if(!n){alert('请输入作品名称');return;}if(!c){alert('请选择分类');return;}if(isNaN(p)||p<0){alert('请输入有效价格');return;}if(!editingImage){alert('请上传作品图片');return;} addOrUpdate({name:n,category:c,price:p,desc:$('#inputDesc').value.trim(),craft:$('#inputCraft').value.trim(),image:editingImage}); });
+  $('#cancelEditBtn').addEventListener('click',resetForm);
+  $('#adminLogout').addEventListener('click',function(){resetForm();showView('main');});
+  $('#exportBtn').addEventListener('click',exportData);
+  $('#importBtn').addEventListener('click',function(){$('#importFileInput').click();});
+  $('#importFileInput').addEventListener('change',function(){if($('#importFileInput').files[0])importData($('#importFileInput').files[0]);$('#importFileInput').value='';});
+  // 管理后台 Tab 切换
+  $$('.admin-tab').forEach(function(tab){
+    tab.addEventListener('click',function(){
+      $$('.admin-tab').forEach(function(t){t.classList.remove('active');t.classList.add('btn-outline');t.classList.remove('btn-primary');});
+      tab.classList.add('active');tab.classList.add('btn-primary');tab.classList.remove('btn-outline');
+      var section = tab.dataset.tab;
+      $('#adminWorksSection').classList.add('hidden');$('#adminTeamSection').classList.add('hidden');$('#adminAboutSection').classList.add('hidden');
+      if (section==='works') $('#adminWorksSection').classList.remove('hidden');
+      else if (section==='team'){$('#adminTeamSection').classList.remove('hidden');renderTeamPkgEdit();renderTeamImgList();}
+      else if (section==='about'){$('#adminAboutSection').classList.remove('hidden');renderAboutEdit();}
+    });
+  });
+  // 团建套餐编辑
+  function renderTeamPkgEdit(){
+    var el = $('#teamPkgEditList');
+    $('#teamPkgCount').textContent = teamPackages.length;
+    el.innerHTML = teamPackages.map(function(p,i){
+      return '<div style="background:var(--paper);border-radius:8px;padding:10px;margin-bottom:8px;">'+
+        '<div style="display:flex;gap:6px;flex-wrap:wrap;">'+
+        '<input data-pidx="'+i+'" data-field="header" value="'+p.header.replace(/"/g,'&quot;')+'" placeholder="标题" style="flex:1;min-width:100px;padding:6px;border:1px solid var(--border);border-radius:4px;font-size:0.78rem;">'+
+        '<input data-pidx="'+i+'" data-field="subtitle" value="'+p.subtitle.replace(/"/g,'&quot;')+'" placeholder="副标题" style="flex:1;min-width:100px;padding:6px;border:1px solid var(--border);border-radius:4px;font-size:0.78rem;">'+
+        '<input data-pidx="'+i+'" data-field="price" value="'+p.price.replace(/"/g,'&quot;')+'" placeholder="价格" style="width:80px;padding:6px;border:1px solid var(--border);border-radius:4px;font-size:0.78rem;">'+
+        '<input data-pidx="'+i+'" data-field="unit" value="'+p.unit.replace(/"/g,'&quot;')+'" placeholder="单位" style="width:60px;padding:6px;border:1px solid var(--border);border-radius:4px;font-size:0.78rem;">'+
+        '<button class="btn btn-danger btn-xs" data-delpkg="'+i+'">✕</button>'+
+        '</div>'+
+        '<input data-pidx="'+i+'" data-field="tags" value="'+p.tags.replace(/"/g,'&quot;')+'" placeholder="标签" style="width:100%;margin-top:4px;padding:6px;border:1px solid var(--border);border-radius:4px;font-size:0.78rem;">'+
+        '<textarea data-pidx="'+i+'" data-field="desc" placeholder="描述" style="width:100%;margin-top:4px;padding:6px;border:1px solid var(--border);border-radius:4px;font-size:0.78rem;min-height:40px;">'+p.desc+'</textarea>'+
+        '</div>';
+    }).join('');
+    // 绑定修改事件
+    el.querySelectorAll('input[data-pidx], textarea[data-pidx]').forEach(function(inp){
+      inp.addEventListener('input',function(){
+        var idx=parseInt(inp.dataset.pidx), field=inp.dataset.field;
+        teamPackages[idx][field]=inp.value;
+        saveTeamPkgs(); renderTeamPkgs();
+      });
+    });
+    // 删除
+    el.querySelectorAll('[data-delpkg]').forEach(function(b){
+      b.addEventListener('click',function(){
+        var idx=parseInt(b.dataset.delpkg);
+        if(confirm('删除第'+(idx+1)+'个套餐？')){teamPackages.splice(idx,1);saveTeamPkgs();renderTeamPkgEdit();renderTeamPkgs();}
+      });
+    });
+  }
+  $('#addTeamPkgBtn').addEventListener('click',function(){
+    teamPackages.push({header:'新套餐',subtitle:'副标题',price:'¥99',unit:'/人',tags:'标签',desc:'描述'});
+    saveTeamPkgs(); renderTeamPkgEdit(); renderTeamPkgs();
+  });
+
+  // 团建图片批量上传
+  var tua=$('#teamImgUploadArea'), tfi=$('#teamImgFileInput');
+  tua.addEventListener('click',function(){tfi.click();});
+  tfi.addEventListener('change',function(){
+    var files = tfi.files;
+    if (!files.length) return;
+    var total = files.length, done = 0;
+    tua.querySelector('span').textContent = '压缩中 0/'+total+'…';
+    function processOne(i){
+      if (i >= total) { saveTeamImages(); renderTeamImgList(); renderTeamGallery(); tua.querySelector('span').textContent='📷 点击选择多张图片（自动压缩，可多选）'; return; }
+      compressImage(files[i]).then(function(u){
+        teamImages.push(u); done++;
+        tua.querySelector('span').textContent = '压缩中 '+done+'/'+total+'…';
+        processOne(i+1);
+      }).catch(function(e){ done++; processOne(i+1); });
+    }
+    processOne(0);
+    tfi.value='';
+  });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'){ if(!$('#detailModal').classList.contains('hidden'))hideModal(); if(!$('#categoryPanel').classList.contains('hidden'))hideCategoryPanel(); if(!$('#passwordModal').classList.contains('hidden'))hidePwModal(); } });
+}
+
+// ==================== 初始化 ====================
+function init() { try{loadData();loadTeamPkgs();loadTeamImages();loadAbout();renderAll();bindEvents();showView('main');}catch(e){document.body.innerHTML+='<div style="text-align:center;padding:40px;color:#B83838;">加载失败，请刷新<br><small>'+e.message+'</small></div>';} }
+document.addEventListener('DOMContentLoaded', init);
+</script>
+
+</body>
+</html>
