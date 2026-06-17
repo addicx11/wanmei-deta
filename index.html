@@ -1018,6 +1018,8 @@ select {
   <div class="admin-topbar">
     <h2>⚙️ 管理后台</h2>
     <button class="btn btn-outline btn-sm" id="adminLogout">← 返回首页</button>
+    <button class="btn btn-primary btn-sm" id="cloudSyncBtn" style="margin-left:8px;" title="推送到云端">☁️ 同步</button>
+    <button class="btn btn-outline btn-sm" id="setTokenBtn" title="设置GitHub Token">🔑</button>
   </div>
 
   <!-- 管理 Tab 切换 -->
@@ -1196,8 +1198,66 @@ var currentFilter = '全部';
 var currentView   = 'main';
 var editingImage  = null;
 
-// 固定7分类（仅绒花按佩戴场景分类）
+// 固定7分类
 var CATEGORIES = ['全部','耳饰','戒指','发卡','胸针','发簪','装饰作品','其他'];
+
+// ==================== GitHub 跨设备同步 ====================
+var GH_USER  = 'addicx11';
+var GH_REPO  = 'wanmei-deta';
+var GH_FILE  = 'data.json';
+var RAW_URL  = 'https://raw.githubusercontent.com/'+GH_USER+'/'+GH_REPO+'/main/'+GH_FILE;
+var API_URL  = 'https://api.github.com/repos/'+GH_USER+'/'+GH_REPO+'/contents/'+GH_FILE;
+
+function getAllCloudData(){
+  return { works:works, teamImages:teamImages, teamPackages:teamPackages, about:{paragraphs:aboutParagraphs, contact:aboutContact} };
+}
+
+// 从云端拉取数据
+function pullFromCloud(cb){
+  fetch(RAW_URL+'?t='+Date.now())
+  .then(function(r){ if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); })
+  .then(function(d){
+    works = d.works||[]; teamImages = d.teamImages||[]; teamPackages = d.teamPackages||[];
+    aboutParagraphs = (d.about&&d.about.paragraphs)||[]; aboutContact = (d.about&&d.about.contact)||{};
+    // 缓存到本地
+    saveLocalAll();
+    console.log('✅ 已从云端加载数据');
+    if(cb) cb();
+  })
+  .catch(function(e){ console.log('⚠️ 云端加载失败，使用本地缓存:', e.message); loadLocalAll(); if(cb) cb(); });
+}
+
+// 推送数据到云端
+function pushToCloud(showMsg){
+  var token = localStorage.getItem('gh_token');
+  if(!token){ if(showMsg)alert('请先在管理后台设置 GitHub Token'); return; }
+  var json = JSON.stringify(getAllCloudData(),null,2);
+  var content = btoa(unescape(encodeURIComponent(json)));
+  fetch(API_URL).then(function(r){return r.json();}).then(function(info){
+    return fetch(API_URL,{method:'PUT',headers:{'Authorization':'Bearer '+token,'Content-Type':'application/json'},body:JSON.stringify({message:'update data',content:content,sha:info.sha})});
+  }).then(function(r){return r.json();}).then(function(result){
+    if(result.content){ saveLocalAll(); if(showMsg)alert('✅ 已同步到云端！其他设备刷新即可看到更新。'); }
+    else { if(showMsg)alert('❌ 同步失败: '+(result.message||'')); }
+  }).catch(function(e){ if(showMsg)alert('❌ 网络错误: '+e.message); });
+}
+
+// 本地全部存储（缓存）
+function saveLocalAll(){
+  try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(works)); }catch(e){}
+  try{ localStorage.setItem(TEAM_IMG_KEY, JSON.stringify(teamImages)); }catch(e){}
+  try{ localStorage.setItem(TEAM_PKG_KEY, JSON.stringify(teamPackages)); }catch(e){}
+  try{ localStorage.setItem(ABOUT_KEY, JSON.stringify({paragraphs:aboutParagraphs,contact:aboutContact})); }catch(e){}
+}
+function loadLocalAll(){
+  loadData(); loadTeamImages(); loadTeamPkgs(); loadAbout();
+}
+
+// Token 设置
+function setGitHubToken(){
+  var t = prompt('请输入 GitHub Personal Access Token（需 repo 权限）：\n\n获取地址：https://github.com/settings/tokens\n\n（仅在本地存储，不会上传）');
+  if(t && t.trim()){ localStorage.setItem('gh_token', t.trim()); alert('✅ Token 已保存！'); return true; }
+  return false;
+}
 
 function $(sel)  { return document.querySelector(sel); }
 function $$(sel) { return document.querySelectorAll(sel); }
@@ -1600,6 +1660,9 @@ function bindEvents() {
   $('#submitBtn').addEventListener('click',function(){ var n=$('#inputName').value.trim(),c=$('#inputCategory').value,p=parseFloat($('#inputPrice').value); if(!n){alert('请输入作品名称');return;}if(!c){alert('请选择分类');return;}if(isNaN(p)||p<0){alert('请输入有效价格');return;}if(!editingImage){alert('请上传作品图片');return;} addOrUpdate({name:n,category:c,price:p,desc:$('#inputDesc').value.trim(),craft:$('#inputCraft').value.trim(),image:editingImage}); });
   $('#cancelEditBtn').addEventListener('click',resetForm);
   $('#adminLogout').addEventListener('click',function(){resetForm();showView('main');});
+  // 云端同步按钮
+  $('#cloudSyncBtn').addEventListener('click',function(){ pushToCloud(true); });
+  $('#setTokenBtn').addEventListener('click',function(){ setGitHubToken(); });
   $('#exportBtn').addEventListener('click',exportData);
   $('#importBtn').addEventListener('click',function(){$('#importFileInput').click();});
   $('#importFileInput').addEventListener('change',function(){if($('#importFileInput').files[0])importData($('#importFileInput').files[0]);$('#importFileInput').value='';});
@@ -1676,7 +1739,7 @@ function bindEvents() {
 }
 
 // ==================== 初始化 ====================
-function init() { try{loadData();loadTeamPkgs();loadTeamImages();loadAbout();renderAll();bindEvents();showView('main');}catch(e){document.body.innerHTML+='<div style="text-align:center;padding:40px;color:#B83838;">加载失败，请刷新<br><small>'+e.message+'</small></div>';} }
+function init() { try{ pullFromCloud(function(){ renderAll(); bindEvents(); showView('main'); }); }catch(e){document.body.innerHTML+='<div style="text-align:center;padding:40px;color:#B83838;">加载失败，请刷新<br><small>'+e.message+'</small></div>';} }
 document.addEventListener('DOMContentLoaded', init);
 </script>
 
