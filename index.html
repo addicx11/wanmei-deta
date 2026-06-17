@@ -1198,12 +1198,25 @@ function getAllCloudData(){
 
 // 从云端拉取数据
 function pullFromCloud(cb){
-  var url = API_URL + '?t=' + Date.now();
   console.log('🔄 正在从云端拉取数据...');
-  fetch(url, {cache:'no-store'})
+  // 先用 API 获取元数据
+  fetch(API_URL+'?t='+Date.now(), {cache:'no-store'})
   .then(function(r){ if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); })
   .then(function(r){
-    var d = JSON.parse(decodeURIComponent(escape(atob(r.content))));
+    // 文件 >1MB 时 content 为空，需用 download_url
+    if (r.content) {
+      return JSON.parse(decodeURIComponent(escape(atob(r.content))));
+    } else if (r.download_url) {
+      // 优先 GitHub raw，失败则用 jsDelivr CDN
+      return fetch(r.download_url+'?t='+Date.now(), {cache:'no-store'}).then(function(rr){ return rr.json(); })
+      .catch(function(){
+        return fetch(RAW_URL+'?v='+Date.now(), {cache:'no-store'}).then(function(rr){ return rr.json(); });
+      });
+    } else {
+      throw new Error('无法读取数据');
+    }
+  })
+  .then(function(d){
     works = d.works||[]; teamImages = d.teamImages||[]; teamPackages = d.teamPackages||[];
     aboutParagraphs = (d.about&&d.about.paragraphs)||[]; aboutContact = (d.about&&d.about.contact)||{};
     saveLocalAll();
