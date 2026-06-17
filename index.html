@@ -1219,15 +1219,26 @@ function pushToCloud(showMsg){
   if(!token){ if(showMsg)alert('请先在管理后台设置 GitHub Token'); return; }
   var json = JSON.stringify(getAllCloudData(),null,2);
   var content = btoa(unescape(encodeURIComponent(json)));
+  _doPush(token, content, 0, function(err){
+    if(err && showMsg) alert('❌ 同步失败: '+err);
+    else if(!err && showMsg) alert('✅ 已同步到云端！其他设备刷新即可看到更新。');
+  });
+}
+
+// 实际推送（含重试）
+function _doPush(token, content, retry, cb){
+  if (retry > 3) { if(cb) cb('重试3次均失败'); return; }
   fetch(API_URL).then(function(r){return r.json();}).then(function(info){
     return fetch(API_URL,{method:'PUT',headers:{'Authorization':'Bearer '+token,'Content-Type':'application/json'},body:JSON.stringify({message:'update data',content:content,sha:info.sha})});
   }).then(function(r){return r.json();}).then(function(result){
-    if(result.content){ saveLocalAll(); if(showMsg)alert('✅ 已同步到云端！其他设备刷新即可看到更新。'); }
-    else { if(showMsg)alert('❌ 同步失败: '+(result.message||'')); }
-  }).catch(function(e){ if(showMsg)alert('❌ 网络错误: '+e.message); });
+    if(result.content){ saveLocalAll(); if(cb) cb(null, 'ok'); }
+    else if(result.message && result.message.indexOf('does not match')!==-1) {
+      _doPush(token, content, retry+1, cb);
+    } else { if(cb) cb(result.message||'未知错误'); }
+  }).catch(function(e){ if(cb) cb(e.message); });
 }
 
-// 静默自动同步（不弹提示，后台静默推送）
+// 静默自动同步
 var _syncTimer = null;
 function autoSync(){
   var token = localStorage.getItem('gh_token');
@@ -1236,11 +1247,7 @@ function autoSync(){
   _syncTimer = setTimeout(function(){
     var json = JSON.stringify(getAllCloudData(),null,2);
     var content = btoa(unescape(encodeURIComponent(json)));
-    fetch(API_URL).then(function(r){return r.json();}).then(function(info){
-      return fetch(API_URL,{method:'PUT',headers:{'Authorization':'Bearer '+token,'Content-Type':'application/json'},body:JSON.stringify({message:'update data',content:content,sha:info.sha})});
-    }).then(function(r){return r.json();}).then(function(result){
-      if(result.content){ saveLocalAll(); console.log('☁️ 自动同步完成'); }
-    }).catch(function(e){ console.log('自动同步失败:', e.message); });
+    _doPush(token, content, 0, function(err){ if(err) console.log('自动同步失败:', err); else console.log('☁️ 自动同步完成'); });
   }, 2000);
 }
 
